@@ -18,13 +18,13 @@
 </template>
 
 <script>
-  export default {
+export default {
     props: [
-      'dialogMessage',
-      'dialogTitle',
-      'dialogText',
+        'dialogMessage',
+        'dialogTitle',
+        'dialogText',
     ]
-  }
+};
 </script>
 
 <style scoped>

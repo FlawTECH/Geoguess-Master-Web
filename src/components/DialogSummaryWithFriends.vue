@@ -9,7 +9,8 @@
         <v-card-text id="card-text">
           <v-row
             class="summary-text-container" 
-            v-for="text in summaryTexts">
+            v-for="(text, index) in summaryTexts"
+            v-bind:key="text-`${index}`">
             <v-col>
               <div class="align-center">
                 <span id="summary-text">
@@ -50,31 +51,31 @@
 </template>
 
 <script>
-  export default {
+export default {
     props: [
-      'dialogSummary',
-      'summaryTexts',
-      'score',
+        'dialogSummary',
+        'summaryTexts',
+        'score',
     ],
     methods: {
-      updateRecord() {
-        var currentRecord = localStorage.getItem('record')
-        if (currentRecord == null || this.score < currentRecord) {
-          localStorage.setItem('record', this.score)
-        }
-      },
-      finishGame() {
-        this.$emit('finishGame')
-      },
+        updateRecord() {
+            var currentRecord = localStorage.getItem('record');
+            if (currentRecord == null || this.score < currentRecord) {
+                localStorage.setItem('record', this.score);
+            }
+        },
+        finishGame() {
+            this.$emit('finishGame');
+        },
     },
     watch: {
-      dialogSummary: function(newVal, oldVal) {
-        if (newVal == true) {
-          this.updateRecord()
-        }
-      }      
+        dialogSummary: function(newVal) {
+            if (newVal == true) {
+                this.updateRecord();
+            }
+        }      
     }
-  } 
+}; 
 </script>
 
 <style scoped>

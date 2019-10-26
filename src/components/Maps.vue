@@ -47,175 +47,176 @@
 </template>
 
 <script>
-  import DialogSummary from '@/components/DialogSummary'
+/* global google */
+import DialogSummary from '@/components/DialogSummary';
 
-  export default {
+export default {
     props: [
-      "randomLatLng",
-      "round",
-      "score",
+        'randomLatLng',
+        'round',
+        'score',
     ],
     components: {
-      DialogSummary,
+        DialogSummary,
     },
     data() {
-      return {
-        markers: [],
-        map: null,
-        polyline: null,
-        selectedLatLng: null,
-        distance: null,
-        isGuessButtonClicked: false,
-        isMakeGuessButtonClicked: false,
-        isSelected: false,
-        dialogSummary: false,
-      }
+        return {
+            markers: [],
+            map: null,
+            polyline: null,
+            selectedLatLng: null,
+            distance: null,
+            isGuessButtonClicked: false,
+            isMakeGuessButtonClicked: false,
+            isSelected: false,
+            dialogSummary: false,
+        };
     },
     methods: {
-      showMap() {
-        document.getElementById('map').style.transform = "translateY(-300px)"
-        this.isMakeGuessButtonClicked = true
-      },
-      hideMap() {
-        document.getElementById('map').style.transform = "translateY(300px)"
-        this.isMakeGuessButtonClicked = false
-      },
-      selectLocation() {
+        showMap() {
+            document.getElementById('map').style.transform = 'translateY(-300px)';
+            this.isMakeGuessButtonClicked = true;
+        },
+        hideMap() {
+            document.getElementById('map').style.transform = 'translateY(300px)';
+            this.isMakeGuessButtonClicked = false;
+        },
+        selectLocation() {
         // Calculate the distance
-        this.calculateDistance()
+            this.calculateDistance();
 
-        // Show the polyline
-        this.drawPolyline()
+            // Show the polyline
+            this.drawPolyline();
 
-        // Put the marker on the random location
-        this.putMarker(this.randomLatLng)
+            // Put the marker on the random location
+            this.putMarker(this.randomLatLng);
 
-        // Set info window
-        this.setInfoWindow()
+            // Set info window
+            this.setInfoWindow();
 
-        // Clear the event
-        google.maps.event.clearListeners(this.map, 'click')
+            // Clear the event
+            google.maps.event.clearListeners(this.map, 'click');
 
-        // Disable guess button and opacity of the map
-        this.isGuessButtonClicked = true
-        this.isSelected = true
+            // Disable guess button and opacity of the map
+            this.isGuessButtonClicked = true;
+            this.isSelected = true;
 
-        // Focus on the map
-        this.mouseOverMap()
-      },
-      putMarker(position) {
-        var marker = new google.maps.Marker({
-          position: position,
-          map: this.map,
-        })
-        this.markers.push(marker)
-      },
-      removeMarkers() {
-        for (var i = 0; i < this.markers.length; i++) {
-          this.markers[i].setMap(null)
-        }
-        this.markers = []
-      },
-      calculateDistance() {
-        this.distance = Math.floor(google.maps.geometry.spherical.computeDistanceBetween(this.randomLatLng, this.selectedLatLng) / 1000)
-        this.$emit('calculateDistance', this.distance)
-      },
-      setInfoWindow() {
-        var infoWindow = new google.maps.InfoWindow({
-          content: '<b>' + this.distance + '</b> km away!'
-        })
-        infoWindow.open(this.map, this.markers[0])        
-      },
-      drawPolyline() {
-        this.polyline = new google.maps.Polyline({
-          path: [this.selectedLatLng, this.randomLatLng],
-          strokeColor: '#FF0000',  
-        })
-        this.polyline.setMap(this.map)
-      },
-      goToNextRound() {
+            // Focus on the map
+            this.mouseOverMap();
+        },
+        putMarker(position) {
+            var marker = new google.maps.Marker({
+                position: position,
+                map: this.map,
+            });
+            this.markers.push(marker);
+        },
+        removeMarkers() {
+            for (var i = 0; i < this.markers.length; i++) {
+                this.markers[i].setMap(null);
+            }
+            this.markers = [];
+        },
+        calculateDistance() {
+            this.distance = Math.floor(google.maps.geometry.spherical.computeDistanceBetween(this.randomLatLng, this.selectedLatLng) / 1000);
+            this.$emit('calculateDistance', this.distance);
+        },
+        setInfoWindow() {
+            var infoWindow = new google.maps.InfoWindow({
+                content: '<b>' + this.distance + '</b> km away!'
+            });
+            infoWindow.open(this.map, this.markers[0]);        
+        },
+        drawPolyline() {
+            this.polyline = new google.maps.Polyline({
+                path: [this.selectedLatLng, this.randomLatLng],
+                strokeColor: '#FF0000',  
+            });
+            this.polyline.setMap(this.map);
+        },
+        goToNextRound() {
         // Reset
-        this.selectedLatLng = null
-        this.polyline.setMap(null)
-        this.isGuessButtonClicked = false
-        this.isSelected = false
+            this.selectedLatLng = null;
+            this.polyline.setMap(null);
+            this.isGuessButtonClicked = false;
+            this.isSelected = false;
 
-        if (this.$viewport.width < 450) {
-          // Hide the map if the player is on mobile
-          this.hideMap()
-        } else {
-          // Set the opacity of the map again if the player is on pc
-          this.mouseOutMap()
-        }
+            if (this.$viewport.width < 450) {
+                // Hide the map if the player is on mobile
+                this.hideMap();
+            } else {
+                // Set the opacity of the map again if the player is on pc
+                this.mouseOutMap();
+            }
 
-        this.removeMarkers()
+            this.removeMarkers();
 
-        // Replace the streetview with new one
-        this.$emit('goToNextRound')
-      },
-      playAgain() {
+            // Replace the streetview with new one
+            this.$emit('goToNextRound');
+        },
+        playAgain() {
         // Reset
-        this.selectedLatLng = null
-        this.polyline.setMap(null)
-        this.isGuessButtonClicked = false
-        this.isSelected = false
-        this.dialogSummary = false
+            this.selectedLatLng = null;
+            this.polyline.setMap(null);
+            this.isGuessButtonClicked = false;
+            this.isSelected = false;
+            this.dialogSummary = false;
 
-        if (this.$viewport.width < 450) {
-          this.hideMap()
-        } else {
-          this.mouseOutMap()
-        }
+            if (this.$viewport.width < 450) {
+                this.hideMap();
+            } else {
+                this.mouseOutMap();
+            }
 
-        // Remove markers
-        this.removeMarkers()
+            // Remove markers
+            this.removeMarkers();
 
-        this.$emit('playAgain')
-      },
-      mouseOverMap() {
+            this.$emit('playAgain');
+        },
+        mouseOverMap() {
         // Focus on map
-        if (this.$viewport.width > 450) {
-          document.getElementById('map').style.opacity = 1.0
-          document.getElementById('map').style.transform = 'scale(1.25)'
-        }
-      },
-      mouseOutMap() {
+            if (this.$viewport.width > 450) {
+                document.getElementById('map').style.opacity = 1.0;
+                document.getElementById('map').style.transform = 'scale(1.25)';
+            }
+        },
+        mouseOutMap() {
         // Focus on map while the player selected a location
         // Otherwise set the opacity of the map
-        if (this.isSelected == false && this.$viewport.width > 450) {
-          document.getElementById('map').style.opacity = 0.7
-          document.getElementById('map').style.transform = 'scale(1.0)'
+            if (this.isSelected == false && this.$viewport.width > 450) {
+                document.getElementById('map').style.opacity = 0.7;
+                document.getElementById('map').style.transform = 'scale(1.0)';
+            }
         }
-      }
     },
     watch: {
-      randomLatLng: function(newVal, oldVal) {
+        randomLatLng: function(newVal) {
         // Enable click event when a random streetview is set
-        if (newVal != null) {
-          const that = this
-          that.map.addListener('click', (e) => {
-            // Clear the previous marker when clicking the map
-            that.removeMarkers()
+            if (newVal != null) {
+                const that = this;
+                that.map.addListener('click', (e) => {
+                    // Clear the previous marker when clicking the map
+                    that.removeMarkers();
 
-            // Show the new marker
-            that.putMarker(e.latLng)
+                    // Show the new marker
+                    that.putMarker(e.latLng);
 
-            // Save latLng
-            that.selectedLatLng = e.latLng
-          })          
+                    // Save latLng
+                    that.selectedLatLng = e.latLng;
+                });          
+            }
         }
-      }
     },
     mounted() {
-      this.map = new google.maps.Map(document.getElementById('map'), {
-          center: {lat: 37.869260, lng: -122.254811},
-          zoom: 1,
-          fullscreenControl: false,
-          mapTypeControl: false,
-          streetViewControl: false,
-      })
+        this.map = new google.maps.Map(document.getElementById('map'), {
+            center: {lat: 37.869260, lng: -122.254811},
+            zoom: 1,
+            fullscreenControl: false,
+            mapTypeControl: false,
+            streetViewControl: false,
+        });
     },
-  }
+};
 </script>
 
 <style scoped>

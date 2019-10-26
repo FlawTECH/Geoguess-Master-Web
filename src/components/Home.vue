@@ -116,21 +116,20 @@
 </template>
 
 <script>
-  import firebase from 'firebase/app'
-  import 'firebase/database'
+import 'firebase/database';
 
-  import DialogRoom from '@/components/DialogRoom'
+import DialogRoom from '@/components/DialogRoom';
 
-  export default {
+export default {
     components: {
-      DialogRoom,
+        DialogRoom,
     },
     data() {
-      return {
-        record: localStorage.getItem('record')
-      }
+        return {
+            record: localStorage.getItem('record')
+        };
     }
-  }
+};
 </script>
 
 <style scoped>

@@ -27,22 +27,22 @@
 </template>
 
 <script>
-  export default {
+export default {
     props: [
-      'score',
-      'round',
-      'remainingTime',
+        'score',
+        'round',
+        'remainingTime',
     ],
     computed: {
-      getCountdownText() {
-        var minutes = Math.floor(this.remainingTime / 60)
-        var seconds = this.remainingTime % 60
-        if (minutes < 10) { minutes = '0' + minutes }
-        if (seconds < 10) { seconds = '0' + seconds }
-        return minutes + ':' + seconds
-      },
+        getCountdownText() {
+            var minutes = Math.floor(this.remainingTime / 60);
+            var seconds = this.remainingTime % 60;
+            if (minutes < 10) { minutes = '0' + minutes; }
+            if (seconds < 10) { seconds = '0' + seconds; }
+            return minutes + ':' + seconds;
+        },
     },
-  }
+};
 </script>
 
 <style scoped>
