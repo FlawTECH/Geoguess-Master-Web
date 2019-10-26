@@ -3,6 +3,20 @@
     <v-app-bar
       class="header-game" 
       color="grey darken-4">
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on }">
+          <v-btn
+            v-on="on"
+            v-on:click="$emit('reset-position')"
+            text
+            icon
+            color="white"
+          >
+            <v-icon color="white">mdi-crosshairs-gps</v-icon>
+          </v-btn>
+        </template>
+        <span>Reset position</span>
+      </v-tooltip>
       <div 
         id="countdown-timer"
         v-if="remainingTime != null && remainingTime != 0"
@@ -31,7 +45,7 @@ export default {
     props: [
         'score',
         'round',
-        'remainingTime',
+        'remainingTime'
     ],
     computed: {
         getCountdownText() {

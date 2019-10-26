@@ -4,7 +4,8 @@
       ref="header"
       :score="scoreHeader"
       :round="round"
-      :remainingTime="remainingTime" />
+      :remainingTime="remainingTime"
+      v-on:reset-position="onResetPosition" />
     <div id="street-view-container">
       <div id="street-view">
       </div>
@@ -69,7 +70,8 @@ export default {
             dialogMessage: true,
             dialogTitle: 'Waiting for other players...',
             dialogText: '',
-            panorama: null
+            panorama: null,
+            startPano: null
         };
     },
     methods: {
@@ -119,6 +121,7 @@ export default {
                             this.loadStreetView();
                             return;
                         }
+                        this.startPano = data.location.pano;
                         this.panorama.setPano(data.location.pano);
                         this.panorama.setPov({
                             heading: 270,
@@ -206,6 +209,13 @@ export default {
             this.dialogTitle = 'Waiting for other players to finish the game...';
             this.dialogText = '';
             this.dialogMessage = true;
+        },
+        onResetPosition() {
+            this.panorama.setPano(this.startPano);
+            this.panorama.setPov({
+                heading: 270,
+                pitch: 0,
+            });
         }
     },
     mounted() {
