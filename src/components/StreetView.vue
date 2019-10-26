@@ -27,6 +27,8 @@
 import HeaderGame from '@/components/HeaderGame';
 import Maps from '@/components/Maps';
 
+import { countryCodes } from '@/helpers/country.helper';
+
 export default {
     components: {
         HeaderGame,
@@ -39,7 +41,8 @@ export default {
             round: 1,
             overlay: false,
             panorama: null,
-            startPano: null
+            startPano: null,
+            countriesChance: null
         };
     },
     methods: {
@@ -63,8 +66,9 @@ export default {
                 console.error(error);
                 return true;
             }
-            const bannedCountries = ['RU'];
-            return bannedCountries.indexOf(result.results[0].locations[0].adminArea1) >= 0;
+            // Check country probability
+            let randomNumber = Math.random();
+            return this.countriesChance.get(result.results[0].locations[0].adminArea1) < randomNumber;
         },
         checkStreetView(data, status) {
         // Generate random streetview until the valid one is generated
@@ -134,6 +138,12 @@ export default {
         }
     },
     mounted() {
+        // Init variables
+        this.countriesChance = new Map();
+        countryCodes.forEach(code => {
+            this.countriesChance.set(code, 1.0);
+        });
+        this.countriesChance.set('RU', 0.3);
         // Generate the first streetview and check if it's valid
         this.panorama = new google.maps.StreetViewPanorama(document.getElementById('street-view'));
         this.panorama.setOptions({

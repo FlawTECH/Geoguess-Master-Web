@@ -41,6 +41,8 @@ import 'firebase/database';
 import HeaderGame from '@/components/HeaderGame';
 import MapsWithFriends from '@/components/MapsWithFriends';
 import DialogMessage from '@/components/DialogMessage';
+import { countryCodes } from '@/helpers/country.helper';
+
 
 export default {
     props: [
@@ -71,7 +73,8 @@ export default {
             dialogTitle: 'Waiting for other players...',
             dialogText: '',
             panorama: null,
-            startPano: null
+            startPano: null,
+            countriesChance: null
         };
     },
     methods: {
@@ -102,6 +105,15 @@ export default {
             var lat = (Math.random() * 170) - 85;
             var lng = (Math.random() * 360) - 180;
             return new google.maps.LatLng(lat, lng);
+        },
+        isBannedLocation(error, result) {
+            if(!result) {
+                console.error(error);
+                return true;
+            }
+            // Check country probability
+            let randomNumber = Math.random();
+            return this.countriesChance.get(result.results[0].locations[0].adminArea1) < randomNumber;
         },
         checkStreetView(data, status) {
         // Generate random streetview until the valid one is generated
@@ -219,6 +231,12 @@ export default {
         }
     },
     mounted() {
+        // Init variables
+        this.countriesChance = new Map();
+        countryCodes.forEach(code => {
+            this.countriesChance.set(code, 1.0);
+        });
+        this.countriesChance.set('RU', 0.3);
         this.panorama = new google.maps.StreetViewPanorama(document.getElementById('street-view'));
         this.panorama.setOptions({
             addressControl: false,
