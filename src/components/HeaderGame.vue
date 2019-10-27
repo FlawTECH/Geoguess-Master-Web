@@ -3,6 +3,7 @@
     <v-app-bar
       class="header-game" 
       color="grey darken-4">
+      <!-- Reset position button -->
       <v-tooltip bottom>
         <template v-slot:activator="{ on }">
           <v-btn
@@ -16,6 +17,21 @@
           </v-btn>
         </template>
         <span>Reset position</span>
+      </v-tooltip>
+      <!-- Refresh streetview button -->
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on }">
+          <v-btn
+            v-on="on"
+            v-on:click="$emit('refresh-streetview')"
+            text
+            icon
+            color="white"
+          >
+            <v-icon color="white">mdi-reload-alert</v-icon>
+          </v-btn>
+        </template>
+        <span>Refresh StreetView (! Unstable)</span>
       </v-tooltip>
       <div 
         id="countdown-timer"

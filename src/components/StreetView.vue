@@ -3,7 +3,8 @@
     <HeaderGame 
       :score="score"
       :round="round"
-      v-on:reset-position="onResetPosition" />
+      v-on:reset-position="onResetPosition"
+      v-on:refresh-streetview="onRefreshStreetView" />
     <div id="street-view-container">
       <div id="street-view">
       </div>
@@ -131,6 +132,28 @@ export default {
         },
         onResetPosition() {
             this.panorama.setPano(this.startPano);
+            this.panorama.setPov({
+                heading: 270,
+                pitch: 0,
+            });
+        },
+        onRefreshStreetView() {
+            // This is a dirty fix and should be considered unstable.
+            // Google creates an instance and doesn't allow itself getting destroyed
+            // Removing the generated HTML kind of fixes the issue,
+            // But the page should be refreshed after a successful round.
+            // https://stackoverflow.com/questions/10485582/what-is-the-proper-way-to-destroy-a-map-instance
+            let currentPano = this.panorama.getPano();
+            document.getElementById('street-view').innerHTML = '';
+            this.panorama = new google.maps.StreetViewPanorama(document.getElementById('street-view'));
+            this.panorama.setOptions({
+                addressControl: false,
+                fullscreenControl: false,
+                motionTracking: false,
+                motionTrackingControl: false,
+                showRoadLabels: false,
+            });
+            this.panorama.setPano(currentPano);
             this.panorama.setPov({
                 heading: 270,
                 pitch: 0,
