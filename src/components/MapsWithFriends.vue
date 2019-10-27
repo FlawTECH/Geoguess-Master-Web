@@ -229,7 +229,7 @@ export default {
         // Focus on map
             if (this.$viewport.width > 450) {
                 document.getElementById('map').style.opacity = 1.0;
-                document.getElementById('map').style.transform = 'scale(1.25)';
+                document.getElementById('map').style.transform = 'scale(1.0)';
             }
         },
         mouseOutMap() {
@@ -237,19 +237,19 @@ export default {
         // Otherwise set the opacity of the map
             if (this.isSelected == false && this.$viewport.width > 450) {
                 document.getElementById('map').style.opacity = 0.7;
-                document.getElementById('map').style.transform = 'scale(1.0)';
+                document.getElementById('map').style.transform = 'scale(0.5)';
             }
         },
     },
     mounted() {
         this.map = new google.maps.Map(document.getElementById('map'), {
-            center: {lat: 37.869260, lng: -122.254811},
+            center: {lat: 0, lng: 0},
             zoom: 1,
             fullscreenControl: false,
             mapTypeControl: false,
-            streetViewControl: false,        
+            streetViewControl: false,   
         });
-
+        this.mouseOutMap();
         this.room = firebase.database().ref(this.roomName);
         this.room.on('value', (snapshot) => {
         // Check if the room is already removed
@@ -340,8 +340,8 @@ export default {
     left: 10px;
     z-index: 3;
     opacity: 0.7;
-    height: 240px;
-    width: 360px;
+    height: 480px;
+    width: 720px;
     transform-origin: bottom left;
     transition: transform 0.3s;
   }
@@ -368,8 +368,8 @@ export default {
     }
 
     #map {
-      height: 200px; 
-      width: 300px;
+      height: 400px; 
+      width: 600px;
     }
   }
 
@@ -384,8 +384,8 @@ export default {
 
     #map {
       bottom: -280px;
-      height: 200px; 
-      width: 300px;
+      height: 400px; 
+      width: 600px;
       opacity: 1.0;
       transition: transform 1s;
     }
