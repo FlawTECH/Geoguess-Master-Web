@@ -60,12 +60,12 @@
           <v-btn
             class="white--text"
             depressed
-            color="#F44336"
+            color="#00E676"
             @click="clickNext">NEXT</v-btn>
           <v-btn
             class="white--text"
             depressed
-            color="#00E676"
+            color="#F44336"
             @click="cancel">CANCEL</v-btn>
         </v-card-actions>
       </v-card>
